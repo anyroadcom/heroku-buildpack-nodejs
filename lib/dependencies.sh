@@ -223,7 +223,7 @@ npm_node_modules() {
     if [[ "$USE_NPM_INSTALL" == "false" ]]; then
       meta_set "use-npm-ci" "true"
       echo "Installing node modules"
-      monitor "npm-install" npm ci --production="$production" --unsafe-perm --userconfig "$build_dir/.npmrc" 2>&1
+      monitor "npm-install" npm ci --production="$production" -w anyroad-medusa-api --unsafe-perm --userconfig "$build_dir/.npmrc" 2>&1
     else
       meta_set "use-npm-ci" "false"
       if [ -e "$build_dir/package-lock.json" ]; then
@@ -233,7 +233,7 @@ npm_node_modules() {
       else
         echo "Installing node modules (package.json)"
       fi
-      monitor "npm-install" npm install --production="$production" --unsafe-perm --userconfig "$build_dir/.npmrc" 2>&1
+      monitor "npm-install" npm install --production="$production" -w anyroad-medusa-api --unsafe-perm --userconfig "$build_dir/.npmrc" 2>&1
     fi
   else
     echo "Skipping (no package.json)"
