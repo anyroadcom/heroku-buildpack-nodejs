@@ -2,6 +2,39 @@
 
 ## main
 
+## v228 (2023-10-31)
+
+- Update default node version to 20.x ([#1171](https://github.com/heroku/heroku-buildpack-nodejs/pull/1171))
+- Added Yarn version 4.0.1.
+
+## v227 (2023-10-26)
+
+- Added Yarn version 4.0.0.
+- Added Node.js version 21.1.0.
+- Added Node.js version 20.9.0.
+
+## v226 (2023-10-19)
+
+- Added Node.js version 21.0.0.
+- Add metrics and tests for Node.js 21. ([#1161](https://github.com/heroku/heroku-buildpack-nodejs/pull/1161))
+
+## v225 (2023-10-17)
+
+- Added Node.js version 20.8.1.
+- Added Node.js version 18.18.2.
+ 
+## v224 (2023-10-11)
+
+- Added Node.js version 18.18.1.
+- Report errors when checking `npm` and `yarn` output ([#1147](https://github.com/heroku/heroku-buildpack-nodejs/pull/1147))
+
+## v223 (2023-10-04)
+
+- Added Node.js version 20.8.0.
+- Added Yarn version 3.6.4.
+- Added Yarn version 4.0.0-rc.52.
+- Added Yarn version 4.0.0-rc.53.
+
 ## v222 (2023-09-25)
 
 - Fixed issue where npm versions `>=10` were being downgraded to version `5.x` ([#1141](https://github.com/heroku/heroku-buildpack-nodejs/pull/1141))

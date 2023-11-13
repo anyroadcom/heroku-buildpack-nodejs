@@ -10,7 +10,7 @@ jobs:
     runs-on: pub-hk-ubuntu-22.04-small
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Rust Toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -19,7 +19,13 @@ jobs:
         run: cargo install heroku-nodejs-utils --bin diff_versions --bin generate_inventory --git https://github.com/heroku/buildpacks-nodejs
       - id: set-diff-msg
         name: Set Diff Message
-        run: echo "::set-output name=msg::$(diff_versions node inventory/node.toml)"
+        run: |
+          delimiter="$(openssl rand -hex 8)"
+          {
+            echo "msg<<${delimiter}"
+            diff_versions node inventory/node.toml
+            echo "${delimiter}"
+          } >> $GITHUB_OUTPUT
       - name: Rebuild Inventory
         run: "generate_inventory node > inventory/node.toml"
       - name: Update Changelog
@@ -37,8 +43,9 @@ jobs:
           title: "Update Node.js Engine Inventory"
           commit-message: "Update Inventory for heroku/nodejs engine\n\n${{ steps.set-diff-msg.outputs.msg }}"
           branch: update-nodejs-inventory
-          labels: "automation"
           body: "Automated pull-request to update heroku/nodejs engine inventory:\n\n${{ steps.set-diff-msg.outputs.msg }}"
+          committer: ${{ vars.LINGUIST_GH_APP_USERNAME }} <${{ vars.LINGUIST_GH_APP_EMAIL }}>
+          author: ${{ vars.LINGUIST_GH_APP_USERNAME }} <${{ vars.LINGUIST_GH_APP_EMAIL }}>
       - name: Configure PR
         if: steps.pr.outputs.pull-request-operation == 'created'
         run: gh pr merge --squash --auto "${{ steps.pr.outputs.pull-request-number }}"
@@ -50,7 +57,7 @@ jobs:
     runs-on: pub-hk-ubuntu-22.04-small
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - id: install-rust-toolchain
         name: Install Rust Toolchain
         uses: actions-rs/toolchain@v1
@@ -60,7 +67,13 @@ jobs:
         run: cargo install heroku-nodejs-utils --bin diff_versions --bin generate_inventory --git https://github.com/heroku/buildpacks-nodejs
       - id: set-diff-msg
         name: Set Diff Message
-        run: echo "::set-output name=msg::$(diff_versions yarn inventory/yarn.toml)"
+        run: |
+          delimiter="$(openssl rand -hex 8)"
+          {
+            echo "msg<<${delimiter}"
+            diff_versions yarn inventory/yarn.toml
+            echo "${delimiter}"
+          } >> $GITHUB_OUTPUT
       - name: Rebuild Inventory
         run: "generate_inventory yarn > inventory/yarn.toml"
       - name: Update Changelog
@@ -78,8 +91,9 @@ jobs:
           title: "Update Node.js Yarn Inventory"
           commit-message: "Update Inventory for heroku/nodejs yarn\n\n${{ steps.set-diff-msg.outputs.msg }}"
           branch: update-yarn-inventory
-          labels: "automation"
           body: "Automated pull-request to update heroku/nodejs yarn inventory:\n\n${{ steps.set-diff-msg.outputs.msg }}"
+          committer: ${{ vars.LINGUIST_GH_APP_USERNAME }} <${{ vars.LINGUIST_GH_APP_EMAIL }}>
+          author: ${{ vars.LINGUIST_GH_APP_USERNAME }} <${{ vars.LINGUIST_GH_APP_EMAIL }}>
       - name: Configure PR
         if: steps.pr.outputs.pull-request-operation == 'created'
         run: gh pr merge --squash --auto "${{ steps.pr.outputs.pull-request-number }}"
