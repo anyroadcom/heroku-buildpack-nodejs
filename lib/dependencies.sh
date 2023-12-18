@@ -91,7 +91,7 @@ run_prebuild_script() {
 }
 
 run_build_script() {
-  npx lerna run build --scope @anyroad/medusa-*
+  npx -y lerna run build --scope @anyroad/medusa-*
   # local build_dir=${1:-}
   # local has_build_script has_heroku_build_script
 
