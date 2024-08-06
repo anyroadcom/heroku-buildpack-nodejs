@@ -3,6 +3,40 @@
 ## [Unreleased]
 
 
+## [v261] - 2024-07-29
+
+- Added Node.js version 20.16.0.
+
+## [v260] - 2024-07-19
+
+- Added Node.js version 22.5.1.
+- Added warning about Node v22.5.0 issues. ([#1299](https://github.com/heroku/heroku-buildpack-nodejs/pull/1299))
+
+## [v259] - 2024-07-18
+
+- Added Node.js version 22.5.0.
+- Skip pruning for pnpm workspace applications. ([#1295](https://github.com/heroku/heroku-buildpack-nodejs/pull/1295))
+
+## [v258] - 2024-07-10
+
+- Export default `NODE_OPTIONS` settings to downstream buildpacks if environment variable is not already set. ([#1293](https://github.com/heroku/heroku-buildpack-nodejs/pull/1293)) 
+
+## [v257] - 2024-07-09
+
+- Added Node.js version 22.4.1.
+- Added Node.js version 20.15.1.
+- Added Node.js version 18.20.4.
+
+## [v256] - 2024-07-03
+
+- Added Node.js version 22.4.0.
+- Added Yarn version 4.3.1.
+- Added Yarn version 3.8.3.
+
+## [v255] - 2024-06-21
+
+- Added Node.js version 20.15.0.
+
 ## [v254] - 2024-06-13
 
 - Added Node.js version 22.3.0.
@@ -863,7 +897,14 @@ Accepts `cacheDirectories` array in package.json to override default `node_modul
 
 - Documented at https://devcenter.heroku.com/articles/nodejs-support#cache-behavior
 
-[unreleased]: https://github.com/heroku/heroku-buildpack-nodejs/compare/v254...main
+[unreleased]: https://github.com/heroku/heroku-buildpack-nodejs/compare/v261...main
+[v261]: https://github.com/heroku/heroku-buildpack-nodejs/compare/v260...v261
+[v260]: https://github.com/heroku/heroku-buildpack-nodejs/compare/v259...v260
+[v259]: https://github.com/heroku/heroku-buildpack-nodejs/compare/v258...v259
+[v258]: https://github.com/heroku/heroku-buildpack-nodejs/compare/v257...v258
+[v257]: https://github.com/heroku/heroku-buildpack-nodejs/compare/v256...v257
+[v256]: https://github.com/heroku/heroku-buildpack-nodejs/compare/v255...v256
+[v255]: https://github.com/heroku/heroku-buildpack-nodejs/compare/v254...v255
 [v254]: https://github.com/heroku/heroku-buildpack-nodejs/compare/v253...v254
 [v253]: https://github.com/heroku/heroku-buildpack-nodejs/compare/v252...v253
 [v252]: https://github.com/heroku/heroku-buildpack-nodejs/compare/v251...v252
