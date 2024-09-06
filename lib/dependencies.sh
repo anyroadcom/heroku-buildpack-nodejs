@@ -102,7 +102,7 @@ run_prebuild_script() {
 }
 
 run_build_script() {
-  npx -y lerna run build --scope @anyroad/medusa-*
+  cd applications/medusa && npx -y lerna run build
   # local build_dir=${1:-}
   # local has_build_script has_heroku_build_script
 
@@ -230,11 +230,11 @@ npm_node_modules() {
   if [ -e "$build_dir/package.json" ]; then
     cd "$build_dir" || return
 
-    echo "Installing for workspace: @anyroad/medusa"
+    echo "Installing for medusa workspace"
     if [[ "$USE_NPM_INSTALL" == "false" ]]; then
       meta_set "use-npm-ci" "true"
       echo "Installing node modules"
-      monitor "npm-install" npm ci --production="$production" -w @anyroad/medusa-api --include-workspace-root --unsafe-perm --userconfig "$build_dir/.npmrc" 2>&1
+      monitor "npm-install" cd applications/medusa && npm ci --production="$production" --unsafe-perm --userconfig "$build_dir/.npmrc" 2>&1
     else
       meta_set "use-npm-ci" "false"
       if [ -e "$build_dir/package-lock.json" ]; then
@@ -244,7 +244,7 @@ npm_node_modules() {
       else
         echo "Installing node modules (package.json)"
       fi
-      monitor "npm-install" npm install --production="$production" -w @anyroad/medusa-api --unsafe-perm --userconfig "$build_dir/.npmrc" 2>&1
+      monitor "npm-install" cd applications/medusa && npm install --production="$production" --unsafe-perm --userconfig "$build_dir/.npmrc" 2>&1
     fi
   else
     echo "Skipping (no package.json)"
