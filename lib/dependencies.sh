@@ -5,7 +5,7 @@ measure_size() {
 }
 
 list_dependencies() {
-  local build_dir="$1"
+  local build_dir="$1/applications/medusa"
 
   cd "$build_dir" || return
   if $YARN; then
@@ -18,7 +18,7 @@ list_dependencies() {
 }
 
 run_if_present() {
-  local build_dir=${1:-}
+  local build_dir="${1:-}/applications/medusa"
   local script_name=${2:-}
   local has_script_name
   local script
@@ -44,7 +44,7 @@ run_if_present() {
 }
 
 run_build_if_present() {
-  local build_dir=${1:-}
+  local build_dir="${1:-}/applications/medusa"
   local script_name=${2:-}
   local has_script_name
   local script
@@ -89,7 +89,7 @@ run_build_if_present() {
 }
 
 run_prebuild_script() {
-  local build_dir=${1:-}
+  local build_dir="${1:-}/applications/medusa"
   local has_heroku_prebuild_script
 
   has_heroku_prebuild_script=$(has_script "$build_dir/package.json" "heroku-prebuild")
@@ -102,7 +102,9 @@ run_prebuild_script() {
 }
 
 run_build_script() {
-  cd applications/medusa && npx -y lerna run build
+  local build_dir="${1:-}/applications/medusa"
+  cd "$build_dir"
+  npx -y lerna run build
   # local build_dir=${1:-}
   # local has_build_script has_heroku_build_script
 
@@ -122,7 +124,7 @@ run_build_script() {
 }
 
 run_cleanup_script() {
-  local build_dir=${1:-}
+  local build_dir="${1:-}/applications/medusa"
   local has_heroku_cleanup_script
 
   has_heroku_cleanup_script=$(has_script "$build_dir/package.json" "heroku-cleanup")
@@ -135,7 +137,7 @@ run_cleanup_script() {
 }
 
 log_build_scripts() {
-  local build_dir=${1:-}
+  local build_dir="${1:-}/applications/medusa"
 
   meta_set "build-script" "$(read_json "$build_dir/package.json" ".scripts[\"build\"]")"
   meta_set "postinstall-script" "$(read_json "$build_dir/package.json" ".scripts[\"postinstall\"]")"
@@ -144,7 +146,7 @@ log_build_scripts() {
 }
 
 yarn_node_modules() {
-  local build_dir=${1:-}
+  local build_dir="${1:-}/applications/medusa"
   local production=${YARN_PRODUCTION:-false}
 
   echo "Installing node modules (yarn.lock)"
@@ -153,7 +155,7 @@ yarn_node_modules() {
 }
 
 yarn_2_install() {
-  local build_dir=${1:-}
+  local build_dir="${1:-}/applications/medusa"
 
   echo "Running 'yarn install' with yarn.lock"
   cd "$build_dir" || return
@@ -162,7 +164,7 @@ yarn_2_install() {
 }
 
 yarn_prune_devdependencies() {
-  local build_dir=${1:-}
+  local build_dir="${1:-}/applications/medusa"
   local cache_dir=${2:-}
   local buildpack_dir=${3:-}
 
@@ -197,7 +199,7 @@ yarn_prune_devdependencies() {
 }
 
 has_npm_lock() {
-  local build_dir=${1:-}
+  local build_dir="${1:-}/applications/medusa"
 
   if [[ -f "$build_dir/package-lock.json" ]] || [[ -f "$build_dir/npm-shrinkwrap.json" ]]; then
     echo "true"
@@ -207,7 +209,7 @@ has_npm_lock() {
 }
 
 should_use_npm_ci() {
-  local build_dir=${1:-}
+  local build_dir="${1:-}/applications/medusa"
   local npm_version
   local major
 
@@ -224,7 +226,7 @@ should_use_npm_ci() {
 }
 
 npm_node_modules() {
-  local build_dir=${1:-}
+  local build_dir="${1:-}/applications/medusa"
   local production=${NPM_CONFIG_PRODUCTION:-false}
 
   if [ -e "$build_dir/package.json" ]; then
@@ -234,7 +236,7 @@ npm_node_modules() {
     if [[ "$USE_NPM_INSTALL" == "false" ]]; then
       meta_set "use-npm-ci" "true"
       echo "Installing node modules"
-      monitor "npm-install" cd applications/medusa && npm ci --production="$production" --unsafe-perm --userconfig "$build_dir/.npmrc" 2>&1
+      monitor "npm-install" npm ci --production="$production" --unsafe-perm --userconfig "$build_dir/.npmrc" 2>&1
     else
       meta_set "use-npm-ci" "false"
       if [ -e "$build_dir/package-lock.json" ]; then
@@ -244,7 +246,7 @@ npm_node_modules() {
       else
         echo "Installing node modules (package.json)"
       fi
-      monitor "npm-install" cd applications/medusa && npm install --production="$production" --unsafe-perm --userconfig "$build_dir/.npmrc" 2>&1
+      monitor "npm-install" npm install --production="$production" --unsafe-perm --userconfig "$build_dir/.npmrc" 2>&1
     fi
   else
     echo "Skipping (no package.json)"
@@ -252,7 +254,7 @@ npm_node_modules() {
 }
 
 npm_rebuild() {
-  local build_dir=${1:-}
+  local build_dir="${1:-}/applications/medusa"
   local production=${NPM_CONFIG_PRODUCTION:-false}
 
   if [ -e "$build_dir/package.json" ]; then
@@ -272,7 +274,7 @@ npm_rebuild() {
 
 npm_prune_devdependencies() {
   local npm_version
-  local build_dir=${1:-}
+  local build_dir="${1:-}/applications/medusa"
 
   npm_version=$(npm --version)
 
@@ -320,7 +322,7 @@ npm_prune_devdependencies() {
 }
 
 pnpm_install() {
-  local build_dir=${1:-}
+  local build_dir="${1:-}/applications/medusa"
   local cache_dir=${2:-}
 
   echo "Running 'pnpm install' with pnpm-lock.yaml"
@@ -338,7 +340,7 @@ pnpm_install() {
 }
 
 pnpm_prune_devdependencies() {
-  local build_dir=${1:-}
+  local build_dir="${1:-}/applications/medusa"
 
   cd "$build_dir" || return
 
