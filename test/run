@@ -179,7 +179,7 @@ testYarnRun() {
 }
 
 testNoVersion() {
-  local default_version="20"
+  local default_version="22"
   compile "no-version"
   assertCaptured "engines.node (package.json):   unspecified"
   assertCaptured "Resolving node version ${default_version}.x"
@@ -2014,7 +2014,55 @@ testPnpmWorkspaceBinaries() {
 testWarningNode_22_5_0() {
   compile "node-22.5.0-warning"
   assertCaptured "Issues with Node.js v22.5.0"
-  cat "$STD_OUT"
+  assertCapturedSuccess
+}
+
+testExecWithPnpmAndCorepack() {
+  compileTest "test-pnpm-with-corepack"
+  assertCaptured "pnpm test run"
+  assertCapturedSuccess
+}
+
+testExecWithPnpmAndEngine() {
+  compileTest "test-pnpm-with-engine"
+  assertCaptured "pnpm test run"
+  assertCapturedSuccess
+}
+
+testExecWithYarnAndCorepack() {
+  compileTest "test-yarn-with-corepack"
+  assertCaptured "yarn test run"
+  assertCapturedSuccess
+}
+
+testExecWithYarnAndEngine() {
+  compileTest "test-yarn-with-engine"
+  assertCaptured "yarn test run"
+  assertCapturedSuccess
+}
+
+testConflictingPackageManagerMetadata() {
+  compile "conflicting-package-manager-metadata"
+  assertCaptured "Multiple package managers declared in package.json"
+  assertCaptured "- npm version detected in engines.npm (10.x)"
+  assertCaptured "- yarn version declared in engines.yarn (4.x)"
+  assertCaptured "- pnpm version declared in engines.pnpm (9.x)"
+  assertCaptured "- pnpm version declared in packageManager (pnpm@9.9.0)"
+  assertCapturedError
+}
+
+testDisableIoUringFix() {
+  compile "libuv_io_uring_fix"
+  assertCaptured "UV_USE_IO_URING is set to 0"
+  assertCapturedSuccess
+}
+
+testDisableIoUringFixUserOverride() {
+  cache_dir=$(mktmpdir)
+  env_dir=$(mktmpdir)
+  echo "1" > "$env_dir/UV_USE_IO_URING"
+  compile "libuv_io_uring_fix" "$cache_dir" "$env_dir"
+  assertCaptured "UV_USE_IO_URING is set to 1"
   assertCapturedSuccess
 }
 
