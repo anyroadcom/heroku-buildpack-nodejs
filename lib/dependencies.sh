@@ -104,7 +104,7 @@ run_prebuild_script() {
 run_build_script() {
   local build_dir="${1:-}/applications/medusa"
   cd "$build_dir"
-  npx -y lerna run build && rm -rf .nx
+  npx -y nx run-many -t build && rm -rf .nx
   # local build_dir=${1:-}
   # local has_build_script has_heroku_build_script
 
